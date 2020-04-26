@@ -17,7 +17,7 @@ namespace Automation.Webs
         {
             CommonTest ct = new CommonTest();
             BrowserDriver bd = new BrowserDriver(BrowserDriver.browserType.Chrome);
-            TeamObjects to = new TeamObjects();
+            Teams to = new Teams();
 
             Credentials cr = new Credentials("Petko");
             cr.Login = "dlp.automation3@safeticadlptesting.onmicrosoft.com";

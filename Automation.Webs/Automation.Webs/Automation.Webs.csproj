@@ -110,7 +110,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tests\CommonTest.cs" />
     <Compile Include="WebObjects\BrowserDriver.cs" />
-    <Compile Include="WebObjects\TeamObjects.cs" />
+    <Compile Include="WebObjects\Teams.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

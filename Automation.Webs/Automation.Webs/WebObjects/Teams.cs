@@ -17,7 +17,7 @@ using NUnit.Framework.Interfaces;
 
 namespace Automation.Webs.WebObjects
 {
-    class TeamObjects
+    class Teams
     {
         string link = "https://teams.microsoft.com/_#/conversations/V%C5%A1eobecn%C3%A9?threadId=19:6623609b5e9d485f9e53fcfad196a653@thread.tacv2&ctx=channel";
 
@@ -41,9 +41,17 @@ namespace Automation.Webs.WebObjects
                 driver.FindElement(By.ClassName("use-app-lnk")).Click();
 
                 Assert.AreEqual(link, @"https://teams.microsoft.com/_#/conversations/V%C5%A1eobecn%C3%A9?threadId=19:6623609b5e9d485f9e53fcfad196a653@thread.tacv2&ctx=channel");
-                Thread.Sleep(30000);
+                Thread.Sleep(30000000);
             }
 
         }
+
+        public void GoToTeam(string teamName) {
+            using (IWebDriver driver = new ChromeDriver()) {
+                driver.FindElement(By.CssSelector("[title={0}]"));
+            }
+
+        }
+
     }
 }
