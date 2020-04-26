@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Automation.Webs
@@ -24,6 +25,8 @@ namespace Automation.Webs
             cr.Password = "Password.dlp";
 
             to.Login(cr);
+            
+            //to.GoToTeam("Automation");
         }
 
         

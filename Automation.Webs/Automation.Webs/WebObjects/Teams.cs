@@ -19,7 +19,12 @@ namespace Automation.Webs.WebObjects
 {
     class Teams
     {
-        string link = "https://teams.microsoft.com/_#/conversations/V%C5%A1eobecn%C3%A9?threadId=19:6623609b5e9d485f9e53fcfad196a653@thread.tacv2&ctx=channel";
+        public enum Location
+        {
+            Computer,
+            OneDrive,
+            Recent
+        }
 
         public void Login(Credentials credentials)
         {
@@ -39,19 +44,48 @@ namespace Automation.Webs.WebObjects
                 driver.FindElement(By.Id("idSIButton9")).Click();
                 driver.FindElement(By.Id("idSIButton9")).Click();
                 driver.FindElement(By.ClassName("use-app-lnk")).Click();
+                Thread.Sleep(10000);
 
-                Assert.AreEqual(link, @"https://teams.microsoft.com/_#/conversations/V%C5%A1eobecn%C3%A9?threadId=19:6623609b5e9d485f9e53fcfad196a653@thread.tacv2&ctx=channel");
-                Thread.Sleep(30000000);
+                
+                
+                Thread.Sleep(34545);
             }
 
         }
 
-        public void GoToTeam(string teamName) {
+        public void GoToTeam(string teamName) { //TODO
+
             using (IWebDriver driver = new ChromeDriver()) {
-                driver.FindElement(By.CssSelector("[title={0}]"));
+                driver.FindElement(By.Id("app-bar-2a84919f-59d8-4441-a975-2a8c2643b741")).Click();
+                //driver.FindElement(By.CssSelector(string.Format("[title={0}]", teamName))).Click();
             }
+        }
+
+        public void UploadFile(Location location, string file)
+        {
+            using (IWebDriver driver = new ChromeDriver())
+            {
+                WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(35)); // netusim preco to klikne na dve veci 
+                IWebElement applyLink = wait.Until(d => d.FindElement(By.ClassName("icons-attachment")));
+                applyLink.Click();
+
+                if (location == Location.Computer)
+                {
+                    driver.FindElement(By.CssSelector("[data-tid=fwn-upload]")).Click();
+                }
+                else if (location == Location.OneDrive) {
+                    driver.FindElement(By.CssSelector("[data-tid=fwn-personal]")).Click();
+                }
+                else if (location == Location.Recent) {
+                    driver.FindElement(By.CssSelector("[data-tid=fwn-recent]")).Click();
+                }
+            }
+           
 
         }
+
+        
+        
 
     }
 }
