@@ -3,10 +3,9 @@ namespace Automation.Webs.Others
 {
     class Credentials
     {
-        private string name;
-
-        public Credentials(string name) {
-            this.name = name;
+        public Credentials(string login, string password) {
+            Login = login;
+            Password = password;
         }
 
         public string Login { get; set; }

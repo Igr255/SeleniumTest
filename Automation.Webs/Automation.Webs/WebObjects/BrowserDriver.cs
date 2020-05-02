@@ -24,29 +24,25 @@ namespace Automation.Webs.WebObjects
             DriverType = browserType;
         }
 
-        public void Start() {
+        public IWebDriver Start() {
+            IWebDriver driver;
             if (DriverType == browserType.Chrome)
             {
                 log.Write("Starting Chrome browser", "Info");
-                using (IWebDriver driver = new ChromeDriver())
-                {
-                    driver.Navigate().GoToUrl("https://teams.microsoft.com/");
-                }
+                driver = new ChromeDriver();
             }
-            else if (DriverType == browserType.Firefox)
-            {
+            else {
                 log.Write("Starting Firefox browser", "Info");
-                using (IWebDriver driver = new FirefoxDriver())
-                {
-                    driver.Navigate().GoToUrl("https://teams.microsoft.com/");
-                }
+                driver = new FirefoxDriver();
             }
+            return driver;
         }
 
         public void Close() {
             using (IWebDriver driver = new ChromeDriver())
             {
                 log.Write("Closing the browser", "Info");
+                driver.Close();
                 driver.Quit();
             }
         }

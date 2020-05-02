@@ -1,6 +1,10 @@
 ﻿using NUnit.Framework;
 using Automation.Webs.Others;
 using NUnit.Framework.Interfaces;
+using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Firefox;
+using System.ComponentModel;
 
 namespace Automation.Webs.Tests
 {
@@ -8,7 +12,6 @@ namespace Automation.Webs.Tests
     class CommonTest
     {
         Logger log = new Logger(@"D:\Log.txt");
-
         [SetUp]
         public void SetUp() {
             log.Write(TestContext.CurrentContext.Test.Name, "Info");
