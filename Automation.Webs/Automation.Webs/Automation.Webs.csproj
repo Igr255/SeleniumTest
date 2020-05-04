@@ -107,10 +107,10 @@
     <Compile Include="Others\Credentials.cs" />
     <Compile Include="Others\Logger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TeamsChromeTest.cs" />
-    <Compile Include="TeamsFirefoxTest.cs" />
+    <Compile Include="Tests\TeamsChromeTest.cs" />
+    <Compile Include="Tests\TeamsFirefoxTest.cs" />
     <Compile Include="Tests\CommonTest.cs" />
-    <Compile Include="Testt.cs" />
+    <Compile Include="Others\Utils.cs" />
     <Compile Include="WebObjects\BrowserDriver.cs" />
     <Compile Include="WebObjects\Teams.cs" />
   </ItemGroup>

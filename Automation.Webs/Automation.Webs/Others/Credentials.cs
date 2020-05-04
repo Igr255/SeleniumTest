@@ -1,5 +1,4 @@
-﻿
-namespace Automation.Webs.Others
+﻿namespace Automation.Webs.Others
 {
     class Credentials
     {

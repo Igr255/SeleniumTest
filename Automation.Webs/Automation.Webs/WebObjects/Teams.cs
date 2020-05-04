@@ -1,141 +1,110 @@
 ﻿using Automation.Webs.Others;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using OpenQA.Selenium;
-using OpenQA.Selenium.Chrome;
-using OpenQA.Selenium.Firefox;
 using OpenQA.Selenium.Support.UI;
-using NUnit;
 using System.Threading;
-using NUnit.Framework;
-using Automation.Webs.Others;
-using NUnit.Framework.Interfaces;
-using System.Drawing;
 
-namespace Automation.Webs.WebObjects
-{
-    class Teams
-    {
-        private bool firstLoad = true;
-        public IWebDriver Driver { get; set; }
+namespace Automation.Webs.WebObjects {
+	class Teams {
+		public enum Location {
+			Computer,
+			OneDrive,
+			Recent
+		}
 
-        private string file;
-        Logger log = new Logger(@"D:\Log.txt");
+		public void Login(Credentials credentials) {
+			Utils.log.Write("Connecting to https://teams.microsoft.com/", "INFO");
 
-        public enum Location
-        {
-            Computer,
-            OneDrive,
-            Recent
-        }
+			Utils.browserDriver.driver.Navigate().GoToUrl("https://teams.microsoft.com/");
+			Utils.browserDriver.driver.FindElement(By.Id("i0116")).SendKeys(credentials.Login);
 
-        public void Login(Credentials credentials)
-        {
-            log.Write("Connecting to https://teams.microsoft.com/", "INFO");
+			Utils.browserDriver.driver.FindElement(By.Id("idSIButton9")).Click();
 
-            Driver.Navigate().GoToUrl("https://teams.microsoft.com/");
-            Driver.FindElement(By.Id("i0116")).SendKeys(credentials.Login);
+			WebDriverWait wait = new WebDriverWait(Utils.browserDriver.driver, TimeSpan.FromSeconds(10));
+			IWebElement ww = wait.Until(ExpectedConditions.ElementIsVisible(By.Id("i0118")));
 
-            Driver.FindElement(By.Id("idSIButton9")).Click();
+			Utils.browserDriver.driver.FindElement(By.Id("i0118")).SendKeys(credentials.Password);
+			Utils.browserDriver.driver.FindElement(By.Id("idSIButton9")).Click();
+			Utils.browserDriver.driver.FindElement(By.Id("idSIButton9")).Click();
+			Utils.browserDriver.driver.FindElement(By.ClassName("use-app-lnk")).Click();
+			Thread.Sleep(5000);
+			Utils.browserDriver.driver.FindElement(By.XPath("//*[@id=\"toast-container\"]/div/div/div[2]/div/button[2]")).Click(); //skusit urobit krajsie toto je fuj
+		}
 
-                
-            WebDriverWait wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(10));
-            IWebElement ww = wait.Until(ExpectedConditions.ElementIsVisible(By.Id("i0118")));
+		public void GoToTeam(string teamName) { //TODO
+			WebDriverWait wait = new WebDriverWait(Utils.browserDriver.driver, TimeSpan.FromSeconds(10));
+			Utils.log.Write($"Moving to a channel: {teamName}", "INFO");
+			Utils.browserDriver.driver.FindElement(By.Id("app-bar-2a84919f-59d8-4441-a975-2a8c2643b741")).Click();
+			wait.Until(ExpectedConditions.ElementIsVisible(By.XPath($"//span[text()='{teamName}']"))).Click();
+			Thread.Sleep(10000);
+		}
 
-            Driver.FindElement(By.Id("i0118")).SendKeys(credentials.Password);
-            Driver.FindElement(By.Id("idSIButton9")).Click();
-            Driver.FindElement(By.Id("idSIButton9")).Click();
-            Driver.FindElement(By.ClassName("use-app-lnk")).Click();
-            Thread.Sleep(5000);
-            Driver.FindElement(By.XPath("//*[@id=\"toast-container\"]/div/div/div[2]/div/button[2]")).Click(); //skusit urobit krajsie toto je fuj
-        }
+		public void UploadFile(Location location, string file) {
+			Utils.browserDriver.driverWait.Until(ExpectedConditions.ElementIsVisible(By.CssSelector("[track-summary=\"Add attachment\"]"))).Click();
 
-        public void GoToTeam(string teamName) { //TODO
-            WebDriverWait wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(10));
-            log.Write($"Moving to a channel: {teamName}", "INFO");
-            Driver.FindElement(By.Id("app-bar-2a84919f-59d8-4441-a975-2a8c2643b741")).Click();
-            wait.Until(ExpectedConditions.ElementIsVisible(By.XPath(string.Format("//span[text()='{0}']", teamName)))).Click();
-            Thread.Sleep(10000);
-        }
-
-        public void UploadFile(Location location, string file)
-        {
-            this.file = file;
-
-            WebDriverWait wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(10)); // netusim preco to klikne na dve veci 
-            wait.Until(ExpectedConditions.ElementIsVisible(By.CssSelector("[track-summary=\"Add attachment\"]"))).Click();
-
-            /*if (firstLoad)
+			/*if (firstLoad)
             {
                 wait.Until(ExpectedConditions.ElementIsVisible(By.CssSelector("[ng-click=\"$ctrl.closeDialog()\"]"))).Click();
                 wait.Until(ExpectedConditions.ElementIsVisible(By.CssSelector("[track-summary=\"Add attachment\"]"))).Click();
                 firstLoad = false;
-            }        */    
+            }*/
 
-            try { // pouzite kvoli pofidernej fcie na Teams
-                WebDriverWait wait1 = new WebDriverWait(Driver, TimeSpan.FromSeconds(4));
-                wait1.Until(ExpectedConditions.ElementIsVisible(By.CssSelector("[ng-click=\"$ctrl.closeDialog()\"]"))).Click();
-                wait1.Until(ExpectedConditions.ElementIsVisible(By.CssSelector("[track-summary=\"Add attachment\"]"))).Click();
-            }
-            catch (Exception e) { log.Write("", "INFO"); }
+			// osetrenie kvoli fuj oknu
+			try {
+				WebDriverWait wait1 = new WebDriverWait(Utils.browserDriver.driver, TimeSpan.FromSeconds(4));
+				wait1.Until(ExpectedConditions.ElementIsVisible(By.CssSelector("[ng-click=\"$ctrl.closeDialog()\"]"))).Click();
+				wait1.Until(ExpectedConditions.ElementIsVisible(By.CssSelector("[track-summary=\"Add attachment\"]"))).Click();
+			}
+			catch(Exception e) {
+				Utils.log.Write(e.ToString(), "ERROR");
+			}
 
+			Utils.log.Write($"Uploading files via: {location}", "INFO");
+			if (location == Location.Computer) { // TODO             
+				Utils.browserDriver.driverWait.Until(ExpectedConditions.ElementIsVisible(By.CssSelector("[data-tid=fwn-upload]"))).SendKeys("D:\\Log.txt"); // vyberie moznost Nahrat z PC
+			}
+			else if (location == Location.OneDrive) {
+				Utils.browserDriver.driverWait.Until(ExpectedConditions.ElementIsVisible(By.CssSelector("[data-tid=fwn-personal]"))).Click(); //vyberie moznost nahrat z OD   
+				Upload(file);
+			}
+			else if (location == Location.Recent) {
+				Utils.browserDriver.driverWait.Until(ExpectedConditions.ElementIsVisible(By.CssSelector("[data-tid=fwn-recent]"))).Click(); // vyberie moznost Nahrat z Recent
+				Upload(file);
+			}
+		}
 
-            log.Write($"Uploading files via: {location}", "INFO");
-            if (location == Location.Computer) {                
-                wait.Until(ExpectedConditions.ElementIsVisible(By.CssSelector("[data-tid=fwn-upload]"))).SendKeys("D:\\Log.txt"); // vyberie moznost Nahrat z PC
-            }
+		public void WriteMessage(string message) {
+			Utils.log.Write($"Typing a message: \"{message}\"", "INFO");
+			Utils.browserDriver.driverWait.Until(ExpectedConditions.ElementIsVisible(By.CssSelector("[role=\"textbox\"]"))).SendKeys(message);
+			Utils.browserDriver.driverWait.Until(ExpectedConditions.ElementToBeClickable(By.Id("send-message-button"))).Click();
+		}
 
-            else if (location == Location.OneDrive) {
-                wait.Until(ExpectedConditions.ElementIsVisible(By.CssSelector("[data-tid=fwn-personal]"))).Click(); //vyberie moznost nahrat z OD   
-                Upload();
-            }
+		private void Upload(string file) {
+			try {
+				Utils.browserDriver.driverWait.Until(ExpectedConditions.ElementIsVisible(By.XPath($"//*[@class=\"ent-name-input\" and text()=\"{file}\"]"))).Click();
+			}
+			catch(Exception e) {
+				Utils.browserDriver.driverWait.Until(ExpectedConditions.ElementIsVisible(By.CssSelector("[ng-click=\"$ctrl.closeDialog()\"]"))).Click();
+				Utils.log.Write(e.ToString(), "ERROR");
+				Utils.browserDriver.driver.Close();
+				Utils.browserDriver.driver.Quit();
+			}
 
+			Utils.browserDriver.driverWait.Until(ExpectedConditions.ElementIsVisible(By.CssSelector("[ng-click=\"$ctrl.submitFileSelected(true)\"]"))).Click();
 
-            else if (location == Location.Recent) {
-                wait.Until(ExpectedConditions.ElementIsVisible(By.CssSelector("[data-tid=fwn-recent]"))).Click(); // vyberie moznost Nahrat z PC
-                Upload();
-            }
-        }
+			//replace dokumentu
+			try {
+				Utils.browserDriver.driverWait.Until(ExpectedConditions.ElementIsVisible(By.CssSelector("[data-tid=\"filesNameCollisionDialog-replaceBtn\"]"))).Click();
+			}
+			catch(Exception e) {
+				Utils.log.Write(e.ToString(), "ERROR");
+			}
 
-        public void WriteMessage(string message) {
-            log.Write($"Typing a message: \"{message}\"", "INFO");
-            WebDriverWait wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(10));
-            wait.Until(ExpectedConditions.ElementIsVisible(By.CssSelector("[role=\"textbox\"]"))).SendKeys(message);
-            wait.Until(ExpectedConditions.ElementToBeClickable(By.Id("send-message-button"))).Click();
-        }
+			Thread.Sleep(5000); //TODO explicit timing for message sending
 
-        private void Upload() {
-            WebDriverWait wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(10)); // netusim preco to klikne na dve veci 
-            try
-            {
-                wait.Until(ExpectedConditions.ElementIsVisible(By.XPath($"//*[@class=\"ent-name-input\" and text()=\"{this.file}\"]"))).Click();
-            }
-            catch (Exception e)
-            {
-                wait.Until(ExpectedConditions.ElementIsVisible(By.CssSelector("[ng-click=\"$ctrl.closeDialog()\"]"))).Click();
-                log.Write(e.ToString(), "ERROR");
-                Driver.Close();
-                Driver.Quit();
-            }
+			Utils.browserDriver.driverWait.Until(ExpectedConditions.ElementToBeClickable(By.Id("send-message-button"))).Click();
+			Utils.log.Write("Message sent successfully", "INFO");
+		}
 
-            wait.Until(ExpectedConditions.ElementIsVisible(By.CssSelector("[ng-click=\"$ctrl.submitFileSelected(true)\"]"))).Click();
-
-            try
-            {
-                wait.Until(ExpectedConditions.ElementIsVisible(By.CssSelector("[data-tid=\"filesNameCollisionDialog-replaceBtn\"]"))).Click();
-            }
-            catch (Exception e) { 
-                log.Write(e.ToString(), "ERROR");
-            }
-
-            Thread.Sleep(5000); //TODO explicit timing for message sending
-
-            wait.Until(ExpectedConditions.ElementToBeClickable(By.Id("send-message-button"))).Click();
-            log.Write("Message sent successfully", "INFO");
-        }
-
-    }
+	}
 }
