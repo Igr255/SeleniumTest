@@ -11,6 +11,7 @@ namespace Automation.Webs.WebObjects
     public class BrowserDriver
     {
         Logger log = new Logger(@"D:\Log.txt");
+        private IWebDriver driver;
 
         public enum browserType
         {
@@ -24,27 +25,27 @@ namespace Automation.Webs.WebObjects
             DriverType = browserType;
         }
 
-        public IWebDriver Start() {
-            IWebDriver driver;
+        public IWebDriver Start() {            
             if (DriverType == browserType.Chrome)
             {
-                log.Write("Starting Chrome browser", "Info");
-                driver = new ChromeDriver();
+                log.Write("Starting Chrome browser", "INFO");
+                ChromeOptions options = new ChromeOptions();
+                options.AddArgument("--start-maximized");
+                driver = new ChromeDriver(options);               
             }
+
             else {
-                log.Write("Starting Firefox browser", "Info");
+                log.Write("Starting Firefox browser", "INFO");                
                 driver = new FirefoxDriver();
+                driver.Manage().Window.Maximize();
             }
             return driver;
         }
 
-        public void Close() {
-            using (IWebDriver driver = new ChromeDriver())
-            {
-                log.Write("Closing the browser", "Info");
-                driver.Close();
-                driver.Quit();
-            }
+        public void Close() {            
+            log.Write("Closing the browser", "INFO");
+            driver.Close();
+            driver.Quit();            
         }
 
        
