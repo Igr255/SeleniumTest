@@ -104,6 +104,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MainClass.cs" />
     <Compile Include="Others\Credentials.cs" />
     <Compile Include="Others\Logger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
