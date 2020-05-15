@@ -6,14 +6,16 @@ using OpenQA.Selenium.Support.UI;
 using System;
 
 namespace Automation.Webs.WebObjects {
-	public class BrowserDriver {
+    public enum browserType
+    {
+        Chrome,
+        Firefox
+    }
+
+    public class BrowserDriver {
 		public IWebDriver driver;
 		public WebDriverWait driverWait;
-
-		public enum browserType {
-			Chrome,
-			Firefox
-		}
+		
 		public browserType DriverType {
 			get;
 			set;

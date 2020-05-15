@@ -6,12 +6,12 @@ namespace Automation.Webs.Others {
 		public static Logger log = new Logger(@"D:\Log.txt");
 
 		public static void initDriverChrome() {
-			browserDriver = new BrowserDriver(BrowserDriver.browserType.Chrome);
+			browserDriver = new BrowserDriver(browserType.Chrome);
 			browserDriver.Start();
 		}
 
 		public static void initDriveFirefox() {
-			browserDriver = new BrowserDriver(BrowserDriver.browserType.Firefox);
+			browserDriver = new BrowserDriver(browserType.Firefox);
 			browserDriver.Start();
 		}
 	}
