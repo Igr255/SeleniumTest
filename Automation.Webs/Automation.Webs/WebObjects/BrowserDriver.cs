@@ -2,6 +2,7 @@
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Firefox;
+using OpenQA.Selenium.Support.PageObjects;
 using OpenQA.Selenium.Support.UI;
 using System;
 
@@ -39,6 +40,7 @@ namespace Automation.Webs.WebObjects {
 				driver.Manage().Window.Maximize();
 			}
 			driverWait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+            
 		}
 
 		public void Close() {

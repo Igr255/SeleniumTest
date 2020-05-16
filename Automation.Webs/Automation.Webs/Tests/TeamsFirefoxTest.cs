@@ -10,38 +10,38 @@ namespace Automation.Webs.Tests {
 
 		[SetUp]
 		public void OneTimeSetUp() {
-			Utils.initDriverChrome();
+			Teams.initDriverChrome();
 			teams.Login(cr);
 			teams.GoToTeam("Test");
 		}
 
 		[Test]
 		public void Test1() {
-			teams.UploadFile(Teams.Location.OneDrive, "SeleniumNUnitProject.docx");
+			teams.UploadFile(Location.OneDrive, "SeleniumNUnitProject.docx");
 			teams.WriteMessage("File 1 Test");
 		}
 
 		[Test]
 		public void Test2() {
-			teams.UploadFile(Teams.Location.OneDrive, "WordFile.docx");
+			teams.UploadFile(Location.OneDrive, "WordFile.docx");
 			teams.WriteMessage("File Word Test");
 		}
 
 		[Test]
 		public void Test3() {
-			teams.UploadFile(Teams.Location.OneDrive, "ExcelFile.xlsx");
+			teams.UploadFile(Location.OneDrive, "ExcelFile.xlsx");
 			teams.WriteMessage("File Excel Test");
 		}
 
 		[Test]
 		public void Test4() {
-			teams.UploadFile(Teams.Location.Recent, "SeleniumNUnitProject.docx");
+			teams.UploadFile(Location.Recent, "SeleniumNUnitProject.docx");
 			teams.WriteMessage("File Recent Test");
 		}
 
 		[TearDown]
 		public void OneTimeTearDown() {
-			Utils.browserDriver.Close();
+			Teams.browserDriver.Close();
 		}
 
 	}

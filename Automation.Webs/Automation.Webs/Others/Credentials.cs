@@ -1,6 +1,6 @@
 ﻿namespace Automation.Webs.Others
 {
-    class Credentials
+    public class Credentials
     {
         public Credentials(string login, string password) {
             Login = login;

@@ -3,7 +3,7 @@ using Automation.Webs.Others;
 using NUnit.Framework.Interfaces;
 
 namespace Automation.Webs.Tests { [TestFixture]
-	class CommonTest {
+	public class CommonTest {
 
 		[SetUp]
 		public void SetUp() {
