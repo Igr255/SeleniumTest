@@ -14,7 +14,7 @@ namespace Automation.Webs.WebObjects {
     }
     public class Teams {
 
-        public static BrowserDriver browserDriver;
+       
 
         public static void initDriverChrome()
         {
