@@ -14,7 +14,7 @@ namespace Automation.Webs.WebObjects {
     }
     public class Teams {
 
-       
+        public static BrowserDriver browserDriver;
 
         public static void initDriverChrome()
         {
@@ -60,39 +60,31 @@ namespace Automation.Webs.WebObjects {
 			Thread.Sleep(10000);
 		}
 
-		public void UploadFile(Location location, string file) {
-			browserDriver.driverWait.Until(ExpectedConditions.ElementIsVisible(By.CssSelector("[track-summary=\"Add attachment\"]"))).Click();
+		    public void UploadFile(Location location, string file) {
+			    browserDriver.driverWait.Until(ExpectedConditions.ElementIsVisible(By.CssSelector("[track-summary=\"Add attachment\"]"))).Click();
 
-			/*if (firstLoad)
-            {
-                wait.Until(ExpectedConditions.ElementIsVisible(By.CssSelector("[ng-click=\"$ctrl.closeDialog()\"]"))).Click();
-                wait.Until(ExpectedConditions.ElementIsVisible(By.CssSelector("[track-summary=\"Add attachment\"]"))).Click();
-                firstLoad = false;
-            }*/
+			    try {
+				    WebDriverWait wait1 = new WebDriverWait(browserDriver.driver, TimeSpan.FromSeconds(4));
+				    wait1.Until(ExpectedConditions.ElementIsVisible(By.CssSelector("[ng-click=\"$ctrl.closeDialog()\"]"))).Click();
+				    wait1.Until(ExpectedConditions.ElementIsVisible(By.CssSelector("[track-summary=\"Add attachment\"]"))).Click();
+			    }
+			    catch(Exception e) {
+				    Utils.log.Write(e.ToString(), "ERROR");
+			    }
 
-			// osetrenie kvoli fcii na teams
-			try {
-				WebDriverWait wait1 = new WebDriverWait(browserDriver.driver, TimeSpan.FromSeconds(4));
-				wait1.Until(ExpectedConditions.ElementIsVisible(By.CssSelector("[ng-click=\"$ctrl.closeDialog()\"]"))).Click();
-				wait1.Until(ExpectedConditions.ElementIsVisible(By.CssSelector("[track-summary=\"Add attachment\"]"))).Click();
-			}
-			catch(Exception e) {
-				Utils.log.Write(e.ToString(), "ERROR");
-			}
-
-			Utils.log.Write($"Uploading files via: {location}", "INFO");
-			if (location == Location.Computer) { // TODO             
-				browserDriver.driverWait.Until(ExpectedConditions.ElementIsVisible(By.CssSelector("[data-tid=fwn-upload]"))).SendKeys("D:\\Log.txt"); // vyberie moznost Nahrat z PC
-			}
-			else if (location == Location.OneDrive) {
-				browserDriver.driverWait.Until(ExpectedConditions.ElementIsVisible(By.CssSelector("[data-tid=fwn-personal]"))).Click(); //vyberie moznost nahrat z OD   
-				Upload(file);
-			}
-			else if (location == Location.Recent) {
-				browserDriver.driverWait.Until(ExpectedConditions.ElementIsVisible(By.CssSelector("[data-tid=fwn-recent]"))).Click(); // vyberie moznost Nahrat z Recent
-				Upload(file);
-			}
-		}
+			    Utils.log.Write($"Uploading files via: {location}", "INFO");
+			    if (location == Location.Computer) { // TODO             
+				    browserDriver.driverWait.Until(ExpectedConditions.ElementIsVisible(By.CssSelector("[data-tid=fwn-upload]"))).SendKeys("D:\\Log.txt"); // vyberie moznost Nahrat z PC
+			    }
+			    else if (location == Location.OneDrive) {
+				    browserDriver.driverWait.Until(ExpectedConditions.ElementIsVisible(By.CssSelector("[data-tid=fwn-personal]"))).Click(); //vyberie moznost nahrat z OD   
+				    Upload(file);
+			    }
+			    else if (location == Location.Recent) {
+				    browserDriver.driverWait.Until(ExpectedConditions.ElementIsVisible(By.CssSelector("[data-tid=fwn-recent]"))).Click(); // vyberie moznost Nahrat z Recent
+				    Upload(file);
+			    }
+		    }
 
 		public void WriteMessage(string message) {
 			Utils.log.Write($"Typing a message: \"{message}\"", "INFO");

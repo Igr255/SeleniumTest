@@ -17,7 +17,6 @@ namespace Automation.Webs.Tests {
 
 		[Test]
 		public void Test1() {
-			teams.UploadFile(Location.OneDrive, "SeleniumNUnitProject.docx");
 			teams.WriteMessage("File 1 Test");
 		}
 
